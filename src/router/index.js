@@ -4,9 +4,13 @@ import VueRouter from 'vue-router'
 // 注册路由
 Vue.use(VueRouter)
 // 导入子组件
-
+import login from '../views/login/index.vue'
 // 创建规则
-const routes = []
+const routes = [{
+    // 路径与组件的名字尽量保持一致
+    path: "/login",
+    component: login
+}]
 // 实例化路由对象
 const router = new VueRouter({
     routes

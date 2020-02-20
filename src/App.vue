@@ -1,16 +1,12 @@
 <template>
-  <div>
-    app.vue
-  <router-link to="">2333</router-link>
-  </div>
+    <router-view></router-view>
 </template>
 
 <script>
 export default {
-
-}
+  methods: {}
+};
 </script>
 
 <style>
-
 </style>
