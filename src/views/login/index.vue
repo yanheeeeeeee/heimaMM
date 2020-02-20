@@ -44,22 +44,24 @@
         </el-row>
         <el-row class="compact">
           <el-col :span="24">
-            <el-checkbox v-model="form.checked"></el-checkbox>我已阅读并同意
-            <el-link type="primary">用户协议</el-link>和
-            <el-link type="primary">隐私条款</el-link>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('form')" :disabled="!form.checked">登 录</el-button>
+            <el-form-item prop="agree">
+              <el-checkbox v-model="form.agree"></el-checkbox>我已阅读并同意
+              <el-link type="primary">用户协议</el-link>和
+              <el-link type="primary">隐私条款</el-link>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item>
-              <el-button type="primary" :disabled="!form.checked">注 册</el-button>
+              <el-button type="primary" @click="submitForm('form')">登 录</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item>
+              <el-button type="primary">注 册</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -77,7 +79,7 @@ export default {
         phoneNum: "",
         password: "",
         code: "",
-        checked: true
+        agree: true
       },
 
       // 规则对象,写在data方法的return里面 里面写了所有的规则
@@ -112,6 +114,14 @@ export default {
             required: true,
             message: "验证码不能为空",
             trigger: "blur"
+          }
+        ],
+        agree: [
+          {
+            required: true,
+            pattern: /true/,
+            message: "请先阅读并同意用户协议",
+            trigger: "change"
           }
         ]
       }
@@ -219,6 +229,14 @@ export default {
       .el-col {
         display: flex;
         align-items: center;
+
+        .el-form-item__content {
+          line-height: 24px;
+
+          .el-checkbox{
+              margin-right: 10px;
+          }
+        }
       }
     }
 
