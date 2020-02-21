@@ -61,18 +61,25 @@
         <el-row>
           <el-col :span="24">
             <el-form-item>
-              <el-button type="primary">注 册</el-button>
+              <el-button type="primary" @click="$refs.register.dialogFormVisible = true">注 册</el-button>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </div>
     <img src="./images/login_banner_ele.png" alt />
+
+    <!-- 注册对话框 -->
+    <register ref="register"></register>
   </div>
 </template>
 
 <script>
+import register from "./components/register.vue";
 export default {
+  components: {
+    register
+  },
   data() {
     return {
       form: {
@@ -233,8 +240,8 @@ export default {
         .el-form-item__content {
           line-height: 24px;
 
-          .el-checkbox{
-              margin-right: 10px;
+          .el-checkbox {
+            margin-right: 10px;
           }
         }
       }
