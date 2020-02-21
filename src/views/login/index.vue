@@ -39,7 +39,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <img src="./images/login_captcha.png" width="100%" alt />
+            <img :src="picCodeUrl" width="100%" alt @click="getNewCode" />
           </el-col>
         </el-row>
         <el-row class="compact">
@@ -82,6 +82,9 @@ export default {
   },
   data() {
     return {
+      // 图形验证码的接口地址
+      picCodeUrl:
+        process.env.VUE_APP_URL + "/captcha?type=login&lol" + Date.now(),
       form: {
         phoneNum: "",
         password: "",
@@ -144,6 +147,16 @@ export default {
           return false;
         }
       });
+    },
+
+    getNewCode() {
+      // 重新给picCodeUrl赋值
+      // 用来解决请求缓存的方案:
+      // 1.随机数:
+      //   this.picCodeUrl = process.env.VUE_APP_URL + "/captcha?type=login&lol"+Math.random();
+      // 2.时间戳(常用):
+      this.picCodeUrl =
+        process.env.VUE_APP_URL + "/captcha?type=login&lol" + Date.now();
     }
   }
 };
