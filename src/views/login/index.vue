@@ -15,8 +15,8 @@
           <el-col :span="24">
             <!-- el-form-item 为表单元素 -->
             <!-- 表单使用规则的时候 需要写一个prop="规则名字",规则名字必须与双向绑定的属性名一致-->
-            <el-form-item prop="phoneNum">
-              <el-input placeholder="请输入手机号" v-model="form.phoneNum" prefix-icon="el-icon-user"></el-input>
+            <el-form-item prop="phone">
+              <el-input placeholder="请输入手机号" v-model="form.phone" prefix-icon="el-icon-user"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -76,6 +76,7 @@
 
 <script>
 import register from "./components/register.vue";
+import { login } from "@/api/login.js";
 export default {
   components: {
     register
@@ -84,9 +85,9 @@ export default {
     return {
       // 图形验证码的接口地址
       picCodeUrl:
-        process.env.VUE_APP_URL + "/captcha?type=login&lol" + Date.now(),
+        process.env.VUE_APP_URL + "/captcha?type=login&lol=" + Date.now(),
       form: {
-        phoneNum: "",
+        phone: "",
         password: "",
         code: "",
         agree: true
@@ -97,7 +98,7 @@ export default {
         // 每个规则就是一个数组
         // name规则, 数据有两条, 就代表有2条规则需要遵守
 
-        phoneNum: [
+        phone: [
           // reqiured: 必须的要填写的内容
           // min: 最小长度
           // max: 最大长度
@@ -141,9 +142,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          login(this.form).then(res => {
+            //成功回调
+            console.log(res);
+            if (res.data.code == 200) {
+              this.$message.success("登录成功!");
+              // 将返回的token存到本地
+              window.localStorage.setItem("token", res.data.data.token);
+            } else {
+              this.$message.error(res.data.message);
+            }
+          });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -156,7 +166,7 @@ export default {
       //   this.picCodeUrl = process.env.VUE_APP_URL + "/captcha?type=login&lol"+Math.random();
       // 2.时间戳(常用):
       this.picCodeUrl =
-        process.env.VUE_APP_URL + "/captcha?type=login&lol" + Date.now();
+        process.env.VUE_APP_URL + "/captcha?type=login&lol=" + Date.now();
     }
   }
 };
