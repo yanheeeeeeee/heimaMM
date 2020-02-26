@@ -77,6 +77,7 @@
 <script>
 import register from "./components/register.vue";
 import { login } from "@/api/login.js";
+import { setToken } from "@/utilis/token.js";
 export default {
   components: {
     register
@@ -147,7 +148,8 @@ export default {
             console.log(res);
             if (res.data.code == 200) {
               this.$message.success("登录成功!");
-              // 将返回的token存到本地
+              // 调用token.js中的方法将返回的token存到本地
+              setToken(res.data.data.token);
               window.localStorage.setItem("token", res.data.data.token);
             } else {
               this.$message.error(res.data.message);
