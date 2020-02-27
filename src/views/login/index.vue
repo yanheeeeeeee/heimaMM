@@ -150,7 +150,7 @@ export default {
               this.$message.success("登录成功!");
               // 调用token.js中的方法将返回的token存到本地
               setToken(res.data.data.token);
-              window.localStorage.setItem("token", res.data.data.token);
+              this.$router.push('/index')
             } else {
               this.$message.error(res.data.message);
             }

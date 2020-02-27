@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+
 // 导入全局样式
 import './style/base.css'
 
 // 导入router实例对象
 import router from './router/index.js'
-
+// 导入vuex对象
+import store from './store/index.js'
 // 导入axios插件
 import axios from 'axios'
 // 给axios设置一个及地址
@@ -21,8 +24,11 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 
+
 new Vue({
   render: h => h(App),
   // 把路由对象挂载到vue实例中
-  router
+  router,
+  // 挂载仓库对象
+  store
 }).$mount('#app')
