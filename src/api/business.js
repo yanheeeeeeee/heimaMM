@@ -1,12 +1,10 @@
-
-
 import axios from 'axios';
 import { getToken } from "@/utilis/token.js"
 // 克隆一个axios对象出来，
 // 他的名字叫indexRequest
 // 他有一些初始基因，就是设置了基地址，以及设置了请求头携带token
 // 所以以后，如果要是通过indexRequest这个对象去发请求，就会自动有基地址和自动携带token了
-let indexRequest = axios.create({
+let businessRequest = axios.create({
     // 基地址
     baseURL: process.env.VUE_APP_URL,
     // 请求头
@@ -16,7 +14,7 @@ let indexRequest = axios.create({
 })
 
 // axios请求拦截
-indexRequest.interceptors.request.use(function (config) {
+businessRequest.interceptors.request.use(function (config) {
 
     // config参数就是被拦截下来的请求的配置
     // window.console.log(config)
@@ -33,12 +31,29 @@ indexRequest.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-// 编辑学科信息
-export function editSubject(data) {
-    return indexRequest({
-        url: '/subject/edit',
-        method: 'post',
-        data
+// 获取企业列表
+export function getBusiness(params) {
+    return businessRequest({
+        url: '/enterprise/list',
+        method: 'get',
+        params
     })
 }
 
+// 修改企业状态
+export function setStatus(id) {
+    return businessRequest({
+        url: '/enterprise/status',
+        method: 'POST',
+        data: { id }
+    })
+}
+
+// 删除企业信息
+export function delBusiness(id) {
+    return businessRequest({
+        url: '/enterprise/remove',
+        method: 'POST',
+        data: { id }
+    })
+}

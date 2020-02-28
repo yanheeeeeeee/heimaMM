@@ -1,5 +1,3 @@
-
-
 import axios from 'axios';
 import { getToken } from "@/utilis/token.js"
 // 克隆一个axios对象出来，
@@ -33,12 +31,11 @@ indexRequest.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-// 编辑学科信息
-export function editSubject(data) {
+// 新增学科
+export function addBusiness(data) {
     return indexRequest({
-        url: '/subject/edit',
+        url: '/enterprise/add',
         method: 'post',
         data
     })
 }
-
