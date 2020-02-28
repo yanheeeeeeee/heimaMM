@@ -30,6 +30,8 @@ const routes = [{
     // 路径与组件的名字尽量保持一致
     path: "/index",
     component: index,
+    // 进入index页面时重定向至学科列表
+    redirect: '/index/subject',
     meta: { title: '首页' },
     children: [
         // 子路由一般不加/

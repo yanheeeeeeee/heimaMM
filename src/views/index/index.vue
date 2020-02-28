@@ -49,7 +49,7 @@
       </el-aside>
       <!-- 主题部分 -->
       <el-main>
-        <router-view></router-view>
+          <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -118,13 +118,16 @@ export default {
   color: #333;
   text-align: center;
   line-height: 200px;
+
+  .el-menu {
+    border: none;
+  }
 }
 
-.el-main {
-  background-color: #fff;
+.el-container .el-main {
+  background-color: #e8e9ec;
   color: #333;
   text-align: center;
-  line-height: 160px;
 }
 .indexHeader {
   display: flex;
