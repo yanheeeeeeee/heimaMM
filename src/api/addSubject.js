@@ -31,29 +31,11 @@ indexRequest.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-// 获取学科列表
-export function getSubject(params) {
+// 新增学科
+export function addSubject(data) {
     return indexRequest({
-        url: '/subject/list',
-        method: 'get',
-        params
-    })
-}
-
-// 修改学科状态
-export function setStatus(id) {
-    return indexRequest({
-        url: '/subject/status',
-        method: 'POST',
-        data: { id }
-    })
-}
-
-// 删除学科信息
-export function delSubject(id) {
-    return indexRequest({
-        url: '/subject/remove',
-        method: 'POST',
-        data: { id }
+        url: '/subject/add',
+        method: 'post',
+        data
     })
 }

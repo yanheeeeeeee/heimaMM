@@ -23,7 +23,8 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
-
+// 导入全局过滤器
+import './filters/filters.js'
 
 new Vue({
   render: h => h(App),
