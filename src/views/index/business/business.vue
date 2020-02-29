@@ -128,7 +128,7 @@ export default {
       // 清空对话框
       this.$refs.businessDialog.form = {};
       // 重置编辑状态保持
-      this.preRow=
+      this.preRow = "";
       // 显示对话框
       this.$refs.businessDialog.dialogFormVisible = true;
     },
