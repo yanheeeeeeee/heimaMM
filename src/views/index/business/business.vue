@@ -21,11 +21,7 @@
         <el-form-item>
           <el-button type="primary" @click="search">搜索</el-button>
           <el-button @click="clearSearch">清除</el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-plus"
-            @click="$refs.addBusiness.dialogFormVisible=true"
-          >新增企业</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增企业</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -74,22 +70,18 @@
         ></el-pagination>
       </div>
     </el-card>
-    <!-- 新增企业对话框 -->
-    <addBusiness ref="addBusiness"></addBusiness>
-    <!-- 编辑企业对话框 -->
-    <editBusiness ref="editBusiness"></editBusiness>
+    <!-- 对话框 -->
+    <businessDialog ref="businessDialog"></businessDialog>
   </div>
 </template>
 
 <script>
-// 导入新增对话框
-import addBusiness from "./components/addBusiness.vue";
-import editBusiness from "./components/editBusiness.vue";
+// 导入对话框
+import businessDialog from "./components/businessDialog.vue";
 import { getBusiness, setStatus, delBusiness } from "@/api/business.js";
 export default {
   components: {
-    addBusiness,
-    editBusiness
+    businessDialog
   },
   data() {
     return {
@@ -115,19 +107,31 @@ export default {
       // 只有在同一行第一次点击的时候进行赋值, 第二次点击时不赋值, 以实现编辑状态保存
       // 思路: 每一次点击判断和上一次点击的是不是同一行, 如果是则不赋值, 不是则重新赋值
 
+      // 将isAdd设置为false
+      this.$refs.businessDialog.isAdd = false;
       // 判断此次点击的行是不是上一次点击的行
       if (row != this.preRow) {
         // 不是,则将此次点击的行存到preRow中
         this.preRow = row;
         // 然后将数据对象拷贝一分给对话框
-        this.$refs.editSubject.form = { ...row };
+        this.$refs.businessDialog.form = { ...row };
       } else {
         // 如果是则什么都不做
       }
       // 显示编辑对话框
-      this.$refs.editSubject.dialogFormVisible = true;
+      this.$refs.businessDialog.dialogFormVisible = true;
     },
-
+    // 新增按钮点击事件
+    handleAdd() {
+      // 将isAdd设置为true
+      this.$refs.businessDialog.isAdd = true;
+      // 清空对话框
+      this.$refs.businessDialog.form = {};
+      // 重置编辑状态保持
+      this.preRow=
+      // 显示对话框
+      this.$refs.businessDialog.dialogFormVisible = true;
+    },
     // 修改subject状态
     handleBan(index, row) {
       console.log(index, row);
