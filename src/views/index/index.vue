@@ -22,40 +22,28 @@
       <!-- 侧边栏部分 -->
       <el-aside width="auto">
         <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="isCollapse" router>
-          <el-menu-item index="/index/chart">
-            <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
-          </el-menu-item>
-          <el-menu-item index="/index/user">
-            <i class="el-icon-user"></i>
-            <span slot="title">用户列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/question">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">题库列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/business">
-            <i class="el-icon-office-building"></i>
-            <span slot="title">企业列表</span>
-          </el-menu-item>
-
-          <el-menu-item index="/index/subject">
-            <i class="el-icon-notebook-2"></i>
-            <span slot="title">学科列表</span>
-          </el-menu-item>
+          <template v-for="(item, index) in children">
+            <el-menu-item
+              :index="`/index/${item.path}`"
+              v-if="item.meta.roles.includes(role)"
+              :key="index"
+            >
+              <i :class="item.meta.icon"></i>
+              <span slot="title">{{item.meta.title}}</span>
+            </el-menu-item>
+          </template>
         </el-menu>
       </el-aside>
       <!-- 主题部分 -->
       <el-main>
-          <router-view></router-view>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
+import children from "@/router/childrenRouter.js";
 import { logout } from "@/api/index.js";
 import { getToken } from "@/utilis/token.js";
 export default {
@@ -63,7 +51,9 @@ export default {
     return {
       username: "",
       avatar: "",
-      isCollapse: false
+      isCollapse: false,
+      role: "",
+      children: ""
     };
   },
   methods: {
@@ -92,6 +82,10 @@ export default {
     // 从vuex中取出username和avatar
     this.username = this.$store.state.username;
     this.avatar = this.$store.state.avatar;
+    this.role = this.$store.state.role;
+
+    // 将子路由children存入data中
+    this.children = children;
   },
   beforeCreate() {
     if (getToken() == null) {

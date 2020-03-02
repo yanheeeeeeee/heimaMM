@@ -147,7 +147,6 @@ export default {
             //成功回调
             console.log(res);
             if (res.data.code == 200) {
-              this.$message.success("登录成功!");
               // 调用token.js中的方法将返回的token存到本地
               setToken(res.data.data.token);
               this.$router.push('/index')

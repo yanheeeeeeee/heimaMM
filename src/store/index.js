@@ -19,6 +19,10 @@ const store = new Vuex.Store({
         // 存入avatar
         setAvatar(state, val) {
             state.avatar = val
+        },
+        // 存入role
+        setRole(state, val) {
+            state.role = val
         }
     }
 })

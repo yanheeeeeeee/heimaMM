@@ -11,7 +11,7 @@
         <el-input v-model="form.phone" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="角色" prop="role_id" :label-width="formLabelWidth">
-        <el-select v-model="form.role_id" placeholder="请选择角色">
+        <el-select @change="form.role_id=form.role" v-model="form.role" placeholder="请选择角色">
           <el-option label="超级管理员" value="1"></el-option>
           <el-option label="管理员" value="2"></el-option>
           <el-option label="老师" value="3"></el-option>
@@ -48,7 +48,8 @@ export default {
         phone: "",
         status: null,
         role_id: null,
-        remark: ""
+        remark: "",
+        role: ""
       },
       rules: {
         username: [

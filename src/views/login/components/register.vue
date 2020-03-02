@@ -184,6 +184,8 @@ export default {
         if (valid) {
           // 验证全部通过后调用api文件返回的方法进行注册
           register(this.regForm).then(res => {
+            console.log(res);
+
             if (res.data.code == 200) {
               this.$message.success("恭喜您,注册成功");
               this.dialogFormVisible = false;
@@ -192,7 +194,7 @@ export default {
               // 清空imageUrl
               this.imageUrl = "";
             } else {
-              this.$message.warning("注册失败");
+              this.$message.warning(res.data.message);
             }
           });
         } else {
@@ -204,10 +206,10 @@ export default {
       // 重新给picCodeUrl赋值
       // 用来解决请求缓存的方案:
       // 1.随机数:
-      //   this.picCodeUrl = process.env.VUE_APP_URL + "/captcha?type=login&lol"+Math.random();
+      //   this.picCodeUrl = process.env.VUE_APP_URL + "/captcha?type=sendsms&lol"+Math.random();
       // 2.时间戳(常用):
       this.picCodeUrl =
-        process.env.VUE_APP_URL + "/captcha?type=login&lol=" + Date.now();
+        process.env.VUE_APP_URL + "/captcha?type=sendsms&lol=" + Date.now();
     },
     getRcode() {
       // 验证用户输入的手机号格式是否正确
