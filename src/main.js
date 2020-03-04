@@ -11,6 +11,12 @@ import router from './router/index.js'
 import store from './store/index.js'
 // 导入axios插件
 import axios from 'axios'
+// 导入全局组件
+import subjectSelect from '@/components/subjectSelect.vue'
+import businessSelect from '@/components/businessSelect.vue'
+// 注册全局组件
+Vue.component('subjectSelect', subjectSelect)
+Vue.component('businessSelect', businessSelect)
 // 给axios设置一个及地址
 axios.defaults.baseURL = "http://127.0.0.1/heimamm/public"
 // 在VUE原型中添加axios
@@ -25,6 +31,8 @@ Vue.config.productionTip = false
 
 // 导入全局过滤器
 import './filters/filters.js'
+
+
 
 new Vue({
   render: h => h(App),

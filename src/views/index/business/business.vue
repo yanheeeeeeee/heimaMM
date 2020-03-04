@@ -46,12 +46,21 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-link type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-link>
+            <el-link
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)"
+              v-if="['超级管理员','管理员','老师'].includes($store.state.role)"
+            >编辑</el-link>
             <el-link
               type="primary"
               @click="handleBan(scope.$index, scope.row)"
+              v-if="['超级管理员','管理员','老师'].includes($store.state.role)"
             >{{scope.row.status==1?"禁用":"启用"}}</el-link>
-            <el-link type="primary" @click="handleDelete(scope.$index, scope.row)">删除</el-link>
+            <el-link
+              type="primary"
+              @click="handleDelete(scope.$index, scope.row)"
+              v-if="['超级管理员','管理员'].includes($store.state.role)"
+            >删除</el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -202,6 +211,7 @@ export default {
   },
   created() {
     this.getBusinessList();
+    console.log(this.$parent);
   }
 };
 </script>
