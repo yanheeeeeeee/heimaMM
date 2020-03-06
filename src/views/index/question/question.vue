@@ -4,11 +4,11 @@
     <!-- 顶部卡片 -->
     <el-card>
       <el-form :inline="true" :model="formInline" ref="formInline" class="demo-form-inline">
-        <el-form-item label="学科">
-          <subjectSelect v-model="formInline.subject"></subjectSelect>
+        <el-form-item label="学科" prop="subject">
+          <subjectSelect v-model="formInline.subject" :isSearch="true"></subjectSelect>
         </el-form-item>
 
-        <el-form-item label="阶段">
+        <el-form-item label="阶段" prop="step">
           <el-select v-model="formInline.step" placeholder="请选择阶段">
             <el-option label="初级" value="1"></el-option>
             <el-option label="中级" value="2"></el-option>
@@ -16,11 +16,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="企业">
-          <businessSelect v-model="formInline.enterprise"></businessSelect>
+        <el-form-item label="企业" prop="enterprise">
+          <businessSelect v-model="formInline.enterprise" :isSearch="true"></businessSelect>
         </el-form-item>
 
-        <el-form-item label="题型">
+        <el-form-item label="题型" prop="type">
           <el-select v-model="formInline.type" placeholder="请选择题型">
             <el-option label="单选" value="1"></el-option>
             <el-option label="多选" value="2"></el-option>
@@ -30,7 +30,7 @@
 
         <br />
 
-        <el-form-item label="难度">
+        <el-form-item label="难度" prop="difficulty">
           <el-select v-model="formInline.difficulty" placeholder="请选择难度">
             <el-option label="简单" value="1"></el-option>
             <el-option label="一般" value="2"></el-option>
@@ -38,18 +38,18 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="作者">
+        <el-form-item label="作者" prop="username">
           <el-input v-model="formInline.username"></el-input>
         </el-form-item>
 
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-select v-model="formInline.status" placeholder="请选择状态">
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value="0"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="日期">
+        <el-form-item label="日期" prop="create_date">
           <div class="block">
             <el-date-picker v-model="formInline.create_date" type="date" placeholder="选择日期"></el-date-picker>
           </div>
@@ -57,7 +57,7 @@
 
         <br />
 
-        <el-form-item label="标题" class="title-item">
+        <el-form-item label="标题" class="title-item" prop="title">
           <el-input v-model="formInline.title"></el-input>
         </el-form-item>
 
@@ -141,7 +141,11 @@
 </template>
 
 <script>
-import { questionList } from "@/api/question.js";
+import {
+  questionList,
+  questionStatus,
+  questionRemove
+} from "@/api/question.js";
 import questionDialog from "./components/questionDialog.vue";
 export default {
   name: "question",
@@ -206,23 +210,16 @@ export default {
 
     // 编辑按钮点击事件
     handleEdit(index, row) {
-      // 将此行数据传给编辑对话框
-      // 由于对象是引用类型, 为了避免修改对话框中信息时导致表格中信息同时变化,所以此处直接用...解构符对该对象进行浅拷贝
-      // 只有在同一行第一次点击的时候进行赋值, 第二次点击时不赋值, 以实现编辑状态保存
-      // 思路: 每一次点击判断和上一次点击的是不是同一行, 如果是则不赋值, 不是则重新赋值
-
       // 将isAdd设置为false
       this.$refs.questionDialog.isAdd = false;
       // 判断此次点击的行是不是上一次点击的行
-      if (row != this.preRow) {
-        // 不是,则将此次点击的行存到preRow中
-        this.preRow = row;
-        // 然后将数据对象拷贝一分给对话框
-        this.$refs.questionDialog.form = { ...row };
-        this.$refs.questionDialog.form.city = row.city.split(",");
-      } else {
-        // 如果是则什么都不做
-      }
+      // 将数据对象拷贝一分给对话框
+      this.$refs.questionDialog.form = { ...row };
+      this.$refs.questionDialog.form.city = row.city.split(",");
+      this.$refs.questionDialog.form.multiple_select_answer = this.$refs.questionDialog.form.multiple_select_answer.split(
+        ","
+      );
+
       // 显示编辑对话框
       this.$refs.questionDialog.dialogFormVisible = true;
     },
@@ -248,6 +245,41 @@ export default {
       this.$refs.formInline.resetFields();
       // 重新获取企业列表
       this.getList();
+    },
+    // 禁用/启用按钮点击事件
+    handleBan(index, row) {
+      questionStatus(row.id).then(res => {
+        if (res.data.code == 200) {
+          this.$message.success("修改题目状态成功");
+          this.getList();
+        } else {
+          this.$message.error(res.data.message);
+        }
+      });
+    },
+    handleDelete(index, row) {
+      // 删除弹框确认
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          questionRemove(row.id).then(res => {
+            if (res.data.code == 200) {
+              this.$message.success("删除题目成功");
+              this.getList();
+            } else {
+              this.$message.error(res.data.message);
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   },
   // 局部过滤器

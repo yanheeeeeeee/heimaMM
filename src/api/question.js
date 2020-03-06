@@ -45,7 +45,7 @@ export function questionOne(id) {
     return indexRequest({
         url: '/question/one',
         method: 'POST',
-        id
+        data: { id }
     })
 }
 
@@ -53,8 +53,8 @@ export function questionOne(id) {
 export function questionStatus(id) {
     return indexRequest({
         url: '/question/status',
-        method: 'POST', 
-        id
+        method: 'POST',
+        data: { id }
     })
 }
 
@@ -63,7 +63,7 @@ export function questionRemove(id) {
     return indexRequest({
         url: '/question/remove',
         method: 'POST',
-        id
+        data: { id }
     })
 }
 
@@ -77,11 +77,11 @@ export function questionEdit(data) {
 }
 
 // 获取题目列表
-export function questionList(data) {
+export function questionList(params) {
     return indexRequest({
         url: '/question/list',
         method: 'get',
-        params: data
+        params
     })
 }
 

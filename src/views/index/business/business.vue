@@ -169,21 +169,27 @@ export default {
     },
     // 删除按钮点击事件
     handleDelete(index, row) {
-      delBusiness(row.id).then(res => {
-        console.log(res);
-        if (res.data.code == 200) {
-          // 判断当前页的行数, 当前页行数为1时则判断当前页页码是否为1,不为1时则将page减1
-          if (this.tableData.length == 1 && this.page != 1) {
-            this.page -= 1;
-          }
-          // 发送消息提示
-          this.$message.success("删除成功");
-          // 刷新表格 (重新请求表格的数据)
-          this.getBusinessList();
-        } else {
-          this.$message.warning("删除失败");
-        }
-      });
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          delBusiness(row.id).then(res => {
+            if (res.data.code == 200) {
+              this.$message.success("删除企业成功");
+              this.getList();
+            } else {
+              this.$message.error(res.data.message);
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     handleSizeChange(val) {
       // 页容量改变时默认页码切换至第一页

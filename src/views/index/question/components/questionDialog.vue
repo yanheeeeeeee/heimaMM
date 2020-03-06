@@ -1,8 +1,14 @@
 <template>
-  <el-dialog :title="isAdd?'新增题库':'编辑题库'" :visible.sync="dialogFormVisible" center fullscreen>
+  <el-dialog
+    :title="isAdd?'新增题库':'编辑题库'"
+    :visible.sync="dialogFormVisible"
+    center
+    fullscreen
+    destroy-on-close
+  >
     <el-form :model="form" :rules="rules" ref="form">
       <el-form-item prop="subject" label="学科" :label-width="formLabelWidth">
-        <subjectSelect v-model="form.subject"></subjectSelect>
+        <subjectSelect v-model="form.subject" :isSearch="false"></subjectSelect>
       </el-form-item>
 
       <el-form-item prop="step" label="阶段" :label-width="formLabelWidth">
@@ -14,7 +20,7 @@
       </el-form-item>
 
       <el-form-item prop="enterprise" label="企业" :label-width="formLabelWidth">
-        <businessSelect v-model="form.enterprise"></businessSelect>
+        <businessSelect v-model="form.enterprise" :isSearch="false"></businessSelect>
       </el-form-item>
 
       <el-form-item prop="city" label="城市" :label-width="formLabelWidth">
@@ -226,6 +232,10 @@ export default {
             questionAdd(this.form).then(res => {
               if (res.data.code == 200) {
                 this.$message.success("题目新增成功");
+                // 重置表单选项
+                this.$refs.form.resetFields();
+                // 刷新列表
+                this.$parent.getList();
               } else {
                 this.$message.error(res.data.message);
               }

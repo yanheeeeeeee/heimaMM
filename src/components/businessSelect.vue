@@ -1,5 +1,6 @@
 <template>
   <el-select v-model="myBusiness" placeholder="请选择企业" @change="$emit('input',myBusiness)">
+    <el-option label="全部企业" v-if="isSearch" value></el-option>
     <el-option
       v-for="(item,index) in businessList"
       :key="index"
@@ -13,7 +14,8 @@
 import { getBusiness } from "@/api/business.js";
 export default {
   props: {
-    value: {}
+    value: {},
+    isSearch: Boolean
   },
   data() {
     return {
@@ -28,6 +30,11 @@ export default {
     }).then(res => {
       this.businessList = res.data.data.items;
     });
+  },
+  watch: {
+    value: function() {
+      this.myBusiness = this.value;
+    }
   }
 };
 </script>
